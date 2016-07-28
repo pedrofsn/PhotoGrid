@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="capturar_imagem">
+        <item>@string/camera</item>
+        <item>@string/galeria</item>
+    </string-array>
+</resources>
