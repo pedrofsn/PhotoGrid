@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,20 +48,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ItemViewHolder> im
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    if (!Utils.isNullOrEmpty(lista.get(position))) {
+                    if (!Utils.isNullOrEmpty(lista.get(position)) && !Utils.isNullOrEmpty(callbackImageLoadable) && !Utils.isNullOrEmpty(holder.handleView)) {
 
                         Object obj = lista.get(position).getPath();
-
-                        if (!Utils.isNullOrEmpty(obj) && !Utils.isNullOrEmpty(holder.handleView)) {
-
-                            if (obj instanceof File) {
-                                callbackImageLoadable.loadImageView((File) obj, holder.handleView);
-
-                            } else if (obj instanceof String) {
-                                callbackImageLoadable.loadImageView((String) obj, holder.handleView);
-
-                            }
-                        }
+                        callbackImageLoadable.loadImageView(obj, holder.handleView);
                     }
                 }
             }).run();

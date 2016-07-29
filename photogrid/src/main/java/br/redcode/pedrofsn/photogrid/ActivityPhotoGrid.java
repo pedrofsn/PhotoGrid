@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,33 +40,22 @@ public class ActivityPhotoGrid extends ActivityGeneric implements Callback, OnSt
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
-        lista.add(new ThumbnailDraggable(0, "http://www.blogwebdesignmicrocamp.com.br/wp-content/uploads/2015/09/carro.png"));
-        lista.add(new ThumbnailDraggable(1, new File("/storage/emulated/0/Download/pedrofsn.jpg")));
-        lista.add(new ThumbnailDraggable(2, "http://caminhosdailuminacao.com.br/wp-content/uploads/2016/01/a-importancia-do-carro-para-os-homens.png"));
-        lista.add(new ThumbnailDraggable(3, "http://motoshopconsorcio.com.br/wp-content/uploads/photo-gallery/carro_top2.png"));
-        lista.add(new ThumbnailDraggable(4, new File("/storage/emulated/0/Download/camaro.jpg")));
-        lista.add(new ThumbnailDraggable(5, "pera"));
-        lista.add(new ThumbnailDraggable(6, "pera"));
-        lista.add(new ThumbnailDraggable(7, "pera"));
-        lista.add(new ThumbnailDraggable(8, "http://mlb-s2-p.mlstatic.com/mini-buggy-utv-150-gaiola-mini-carro-quad-fapinha-534101-MLB20270035357_032015-O.jpg"));
-        lista.add(new ThumbnailDraggable(9, "pera"));
-        lista.add(new ThumbnailDraggable(10, "pera"));
-        lista.add(new ThumbnailDraggable(11, "pera"));
-        lista.add(new ThumbnailDraggable(12, "http://blog.sossego.com.br/wp-content/uploads/2013/10/carro-bolt1.png"));
-        lista.add(new ThumbnailDraggable(13, "pera"));
-        lista.add(new ThumbnailDraggable(14, "pera"));
+        lista.add(new ThumbnailDraggable("http://www.blogwebdesignmicrocamp.com.br/wp-content/uploads/2015/09/carro.png"));
+        lista.add(new ThumbnailDraggable(new File("/storage/emulated/0/Download/pedrofsn.jpg")));
+        lista.add(new ThumbnailDraggable("http://caminhosdailuminacao.com.br/wp-content/uploads/2016/01/a-importancia-do-carro-para-os-homens.png"));
+        lista.add(new ThumbnailDraggable("http://motoshopconsorcio.com.br/wp-content/uploads/photo-gallery/carro_top2.png"));
+        lista.add(new ThumbnailDraggable(new File("/storage/emulated/0/Download/camaro.jpg")));
+        lista.add(new ThumbnailDraggable(""));
+        lista.add(new ThumbnailDraggable("http://mlb-s2-p.mlstatic.com/mini-buggy-utv-150-gaiola-mini-carro-quad-fapinha-534101-MLB20270035357_032015-O.jpg"));
+        lista.add(new ThumbnailDraggable("http://blog.sossego.com.br/wp-content/uploads/2013/10/carro-bolt1.png"));
 
         photoGrid = new PhotoGrid.PhotoGridBuilder(recyclerView)
                 .data(lista)
+                .canChangeImage(false)
                 .callbackImageLoadable(new ImageLoadable() {
                     @Override
-                    public void loadImageView(String path, ImageView imageView) {
-                        PicassoCache.carregar(path, imageView);
-                    }
-
-                    @Override
-                    public void loadImageView(File file, ImageView imageView) {
-                        PicassoCache.carregar(file, imageView);
+                    public void loadImageView(Object o, ImageView imageView) {
+                        PicassoCache.carregar(o, imageView);
                     }
                 })
                 .build();
@@ -73,15 +63,16 @@ public class ActivityPhotoGrid extends ActivityGeneric implements Callback, OnSt
         adapter = new RecyclerViewAdapter(photoGrid.getData(), new MyOnItemClickListener() {
             @Override
             public void myOnItemClick(View view, int position) {
-                int clickedPosition = (photoGrid.getData().get(position).getUrl() == null || "pera".equals(photoGrid.getData().get(position).getUrl())) ? position : Constantes.VALOR_INVALIDO;
+                int clickedPosition = Utils.isNullOrEmpty(photoGrid.getData().get(position).getPath()) ? Constantes.VALOR_INVALIDO : position;
 
-                if (clickedPosition == tempPosition) {
-                    tempPosition = Constantes.VALOR_INVALIDO;
-                } else {
-                    tempPosition = clickedPosition;
+                if (Constantes.VALOR_INVALIDO == clickedPosition || photoGrid.canChangeImage()) {
+                    tempPosition = position;
+                    exibirAlert();
+                    return;
                 }
 
-                exibirAlert();
+                tempPosition = Constantes.VALOR_INVALIDO;
+                Toast.makeText(ActivityPhotoGrid.this, "Já existe imagem vinculada", Toast.LENGTH_SHORT).show();
             }
         }, this, photoGrid.getCallbackImageLoadable());
 

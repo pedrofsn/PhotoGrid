@@ -7,45 +7,21 @@ import java.io.File;
  */
 public class ThumbnailDraggable {
 
-    private String url;
-    private int posicao;
-    private File file;
+    private Object path;
 
-    public ThumbnailDraggable(int posicao, String url) {
-        this.posicao = posicao;
-        this.url = url;
+    public ThumbnailDraggable(File file) {
+        this.path = file;
     }
 
-    public ThumbnailDraggable(int posicao, File file) {
-        this.posicao = posicao;
-        this.file = file;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public int getPosicao() {
-        return posicao;
-    }
-
-    public void setPosicao(int posicao) {
-        this.posicao = posicao;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
+    public ThumbnailDraggable(String path) {
+        this.path = path;
     }
 
     public Object getPath() {
-        return Utils.isNullOrEmpty(file) ? url : file;
+        return path;
+    }
+
+    public void setPath(Object path) {
+        this.path = path;
     }
 }

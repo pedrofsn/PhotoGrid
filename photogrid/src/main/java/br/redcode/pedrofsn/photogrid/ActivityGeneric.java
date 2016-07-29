@@ -92,12 +92,10 @@ public class ActivityGeneric extends AppCompatActivity {
         Utils.log("addThumbnail na posição " + tempPosition + ": " + obj);
 
         if (!Utils.isNullOrEmpty(obj) && !Utils.isNullOrEmpty(photoGrid) && !Utils.isNullOrEmpty(photoGrid.getData()) && Constantes.VALOR_INVALIDO != tempPosition) {
-            if (obj instanceof File && tempPosition <= photoGrid.getData().size() - 1) {
-                photoGrid.getData().get(tempPosition).setFile(((File) obj));
-            } else if (obj instanceof String) {
-                photoGrid.getData().get(tempPosition).setUrl(((String) obj));
+            if (tempPosition <= photoGrid.getData().size() - 1) {
+                photoGrid.getData().get(tempPosition).setPath(obj);
+                tempPosition = Constantes.VALOR_INVALIDO;
             }
-            tempPosition = Constantes.VALOR_INVALIDO;
         }
     }
 }
