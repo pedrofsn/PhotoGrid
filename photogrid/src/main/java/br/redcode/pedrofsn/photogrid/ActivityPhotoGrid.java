@@ -31,7 +31,7 @@ public class ActivityPhotoGrid extends ActivityGeneric implements Callback, OnSt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maina);
+        setContentView(R.layout.activity_main);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
