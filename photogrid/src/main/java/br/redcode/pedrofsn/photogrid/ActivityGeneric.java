@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * Created by pedrofsn on 29/07/2016.
  */
-public class ActivityGeneric extends AppCompatActivity {
+public abstract class ActivityGeneric extends AppCompatActivity {
 
     public int tempPosition = Constantes.VALOR_INVALIDO;
     public PhotoGrid photoGrid;
@@ -94,8 +94,11 @@ public class ActivityGeneric extends AppCompatActivity {
         if (!Utils.isNullOrEmpty(obj) && !Utils.isNullOrEmpty(photoGrid) && !Utils.isNullOrEmpty(photoGrid.getData()) && Constantes.VALOR_INVALIDO != tempPosition) {
             if (tempPosition <= photoGrid.getData().size() - 1) {
                 photoGrid.getData().get(tempPosition).setPath(obj);
+                notifyItemChanged(tempPosition);
                 tempPosition = Constantes.VALOR_INVALIDO;
             }
         }
     }
+
+    public abstract void notifyItemChanged(int position);
 }

@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import br.redcode.pedrofsn.photogrid.helper.ItemTouchHelperViewHolder;
 
@@ -14,13 +13,11 @@ import br.redcode.pedrofsn.photogrid.helper.ItemTouchHelperViewHolder;
  */
 public class ItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
 
-    public final TextView textView;
-    public final FrameLayout frameLayout;
-    public final ImageView handleView;
+    public FrameLayout frameLayout;
+    public ImageView handleView;
 
     public ItemViewHolder(View itemView) {
         super(itemView);
-        textView = (TextView) itemView.findViewById(R.id.textView);
         handleView = (ImageView) itemView.findViewById(R.id.imageView);
         frameLayout = (FrameLayout) itemView.findViewById(R.id.frameLayout);
     }

@@ -130,8 +130,7 @@ public class ActivityPhotoGrid extends ActivityGeneric implements Callback, OnSt
     }
 
     @Override
-    public void addThumbnail(Object obj) {
-        super.addThumbnail(obj);
-        adapter.notifyDataSetChanged();
+    public void notifyItemChanged(int position) {
+        adapter.notifyItemChanged(position);
     }
 }

@@ -42,8 +42,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ItemViewHolder> im
                     callback.myOnItemClick(holder.frameLayout, position);
                 }
             });
-            holder.textView.setText(String.valueOf(position));
-            activeDrag(holder);
+
+            holder.handleView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                        mDragStartListener.onStartDrag(holder);
+                    }
+                    return false;
+                }
+            });
 
             new Thread(new Runnable() {
                 @Override
@@ -56,18 +64,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ItemViewHolder> im
                 }
             }).run();
         }
-    }
-
-    private void activeDrag(final ItemViewHolder holder) {
-        holder.handleView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    mDragStartListener.onStartDrag(holder);
-                }
-                return false;
-            }
-        });
     }
 
     @Override
