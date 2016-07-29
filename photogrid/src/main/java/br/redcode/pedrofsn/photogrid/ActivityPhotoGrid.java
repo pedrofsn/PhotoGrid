@@ -62,7 +62,7 @@ public class ActivityPhotoGrid extends Activity implements Callback, OnStartDrag
         recyclerView.setLayoutManager(layoutManager);
 
         lista.add(new ThumbnailDraggable(0, "http://www.blogwebdesignmicrocamp.com.br/wp-content/uploads/2015/09/carro.png"));
-        lista.add(new ThumbnailDraggable(1, "pera"));
+        lista.add(new ThumbnailDraggable(1, ""));
         lista.add(new ThumbnailDraggable(2, "http://caminhosdailuminacao.com.br/wp-content/uploads/2016/01/a-importancia-do-carro-para-os-homens.png"));
         lista.add(new ThumbnailDraggable(3, "http://motoshopconsorcio.com.br/wp-content/uploads/photo-gallery/carro_top2.png"));
         lista.add(new ThumbnailDraggable(4, "pera"));
@@ -196,7 +196,7 @@ public class ActivityPhotoGrid extends Activity implements Callback, OnStartDrag
 
     private void handleAttachPictureResult(Intent data) {
         Uri uri = data.getData();
-        addThumbnail(uri);
+        addThumbnail(getRealPathFromURI(this, uri));
     }
 
     private void addNewImageToGallery(Context context, String filePath) {
@@ -220,15 +220,15 @@ public class ActivityPhotoGrid extends Activity implements Callback, OnStartDrag
     }
 
     private void addThumbnail(Object obj) {
-        Utils.log("addThumbnail: " + obj);
+        Utils.log("addThumbnail na posição " + tempPosition + ": " + obj);
 
-        if (!Utils.isNullOrEmpty(obj)) {
-            if (obj instanceof Uri) {
+        if (!Utils.isNullOrEmpty(obj) && !Utils.isNullOrEmpty(photoGrid) && !Utils.isNullOrEmpty(photoGrid.getData()) && Constantes.VALOR_INVALIDO != tempPosition) {
+            if (obj instanceof Uri && tempPosition <= photoGrid.getData().size() - 1) {
                 photoGrid.getData().get(tempPosition).setUri(((Uri) obj));
             } else if (obj instanceof String) {
                 photoGrid.getData().get(tempPosition).setUrl(((String) obj));
             }
-            adapter.notifyDataSetChanged();
+//            adapter.notifyDataSetChanged();
             tempPosition = Constantes.VALOR_INVALIDO;
         }
     }

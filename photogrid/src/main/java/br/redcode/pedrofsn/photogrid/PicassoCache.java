@@ -3,9 +3,7 @@ package br.redcode.pedrofsn.photogrid;
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Downloader;
-import com.squareup.picasso.OkHttpDownloader;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -17,12 +15,11 @@ public class PicassoCache {
 
     private PicassoCache(Context context) {
 
-        Downloader downloader = new OkHttpDownloader(context, Integer.MAX_VALUE);
-        Picasso.Builder builder = new Picasso.Builder(context);
-        builder.downloader(downloader);
+        OkHttp3Downloader client = new OkHttp3Downloader(context, Integer.MAX_VALUE);
 
-        picassoInstance = builder
-//            .loggingEnabled(true)
+        picassoInstance = new Picasso.Builder(context)
+                .downloader(client)
+                .loggingEnabled(true)
                 .build();
     }
 
@@ -36,42 +33,30 @@ public class PicassoCache {
         return picassoInstance;
     }
 
-    public static void carregar(Object url, ImageView imageView) {
-        carregar(App.getContext(), url, imageView);
-    }
-
-    public static void carregar(Object url, ImageView imageView, Callback callback) {
-        carregar(App.getContext(), url, imageView, callback);
-    }
-
-    private static void carregar(Context context, Object object, ImageView imageView, Callback callback) {
+    public static void carregar(Object object, ImageView imageView) {
         if (!Utils.isNullOrEmpty(object)) {
 
             if (object instanceof Integer) {
-                PicassoCache.getPicassoInstance(context)
+                PicassoCache.getPicassoInstance(App.getContext())
                         .load(((Integer) object))
                         .error(getDrawableError())
                         .placeholder(getDrawablePlaceHolder())
                         .priority(getPriority())
-                        .into(imageView, callback);
+                        .into(imageView);
 
             } else if (object instanceof String) {
-                PicassoCache.getPicassoInstance(context)
+                PicassoCache.getPicassoInstance(App.getContext())
                         .load(((String) object))
                         .error(getDrawableError())
                         .placeholder(getDrawablePlaceHolder())
                         .priority(getPriority())
-                        .into(imageView, callback);
+                        .into(imageView);
             }
         }
     }
 
-    public static void carregar(Context context, Object url, ImageView imageView) {
-        carregar(App.getContext(), url, imageView, null);
-    }
-
     private static Picasso.Priority getPriority() {
-        return Picasso.Priority.HIGH;
+        return Picasso.Priority.NORMAL;
     }
 
     private static int getDrawablePlaceHolder() {
