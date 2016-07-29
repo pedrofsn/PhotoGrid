@@ -5,5 +5,5 @@ package br.redcode.pedrofsn.photogrid;
  */
 public class Constantes {
     public static final int VALOR_INVALIDO = -1;
-    public static final String TAG = "app";
+    public static final String TAG = "photogrid";
 }

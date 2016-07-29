@@ -43,7 +43,6 @@ public abstract class ActivityGeneric extends AppCompatActivity {
             return null;
 
         mTakePicturePath = pictureFile.getAbsolutePath();
-        Utils.log("Path: " + mTakePicturePath);
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureFile));
@@ -57,8 +56,6 @@ public abstract class ActivityGeneric extends AppCompatActivity {
     }
 
     public void handleTakePictureResult() {
-        Utils.log("File Path: " + mTakePicturePath);
-
         addThumbnail(mTakePicturePath);
         addNewImageToGallery(this, mTakePicturePath);
     }
@@ -89,7 +86,6 @@ public abstract class ActivityGeneric extends AppCompatActivity {
     }
 
     public void addThumbnail(Object obj) {
-        Utils.log("addThumbnail na posição " + tempPosition + ": " + obj);
 
         if (!Utils.isNullOrEmpty(obj) && !Utils.isNullOrEmpty(photoGrid) && !Utils.isNullOrEmpty(photoGrid.getData()) && Constantes.VALOR_INVALIDO != tempPosition) {
             if (tempPosition <= photoGrid.getData().size() - 1) {
