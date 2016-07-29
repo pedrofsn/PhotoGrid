@@ -1,10 +1,11 @@
-package br.redcode.pedrofsn.photogrid;
+package br.redcode.pedrofsn.photogrid.activity;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -16,14 +17,26 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.redcode.pedrofsn.photogrid.helper.OnStartDragListener;
-import br.redcode.pedrofsn.photogrid.helper.SimpleItemTouchHelperCallback;
+import br.redcode.pedrofsn.photogrid.R;
+import br.redcode.pedrofsn.photogrid.adapter.RecyclerViewAdapter;
+import br.redcode.pedrofsn.photogrid.domain.Callback;
+import br.redcode.pedrofsn.photogrid.domain.CallbackItemChanged;
+import br.redcode.pedrofsn.photogrid.domain.ImageLoadable;
+import br.redcode.pedrofsn.photogrid.domain.MyOnItemClickListener;
+import br.redcode.pedrofsn.photogrid.domain.OnStartDragListener;
+import br.redcode.pedrofsn.photogrid.domain.SimpleItemTouchHelperCallback;
+import br.redcode.pedrofsn.photogrid.model.ThumbnailDraggable;
+import br.redcode.pedrofsn.photogrid.utils.Constantes;
+import br.redcode.pedrofsn.photogrid.utils.PhotoGrid;
+import br.redcode.pedrofsn.photogrid.utils.PicassoCache;
+import br.redcode.pedrofsn.photogrid.utils.Utils;
 
 
-public class ActivityPhotoGrid extends ActivityGeneric implements Callback, OnStartDragListener {
+public class ActivityPhotoGrid extends AppCompatActivity implements Callback, OnStartDragListener, CallbackItemChanged {
 
     private static final int REQUEST_CODE_TAKE_PICTURE = 9393;
     private static final int REQUEST_CODE_ATTACH_PICTURE = 3939;
+    public PhotoGrid photoGrid;
     private ItemTouchHelper mItemTouchHelper;
     private List<ThumbnailDraggable> lista = new ArrayList<>();
     private RecyclerViewAdapter adapter;
@@ -49,7 +62,7 @@ public class ActivityPhotoGrid extends ActivityGeneric implements Callback, OnSt
         lista.add(new ThumbnailDraggable("http://mlb-s2-p.mlstatic.com/mini-buggy-utv-150-gaiola-mini-carro-quad-fapinha-534101-MLB20270035357_032015-O.jpg"));
         lista.add(new ThumbnailDraggable("http://blog.sossego.com.br/wp-content/uploads/2013/10/carro-bolt1.png"));
 
-        photoGrid = new PhotoGrid.PhotoGridBuilder(recyclerView)
+        photoGrid = new PhotoGrid.PhotoGridBuilder(recyclerView, this)
                 .data(lista)
                 .canChangeImage(false)
                 .callbackImageLoadable(new ImageLoadable() {
@@ -66,12 +79,12 @@ public class ActivityPhotoGrid extends ActivityGeneric implements Callback, OnSt
                 int clickedPosition = Utils.isNullOrEmpty(photoGrid.getData().get(position).getPath()) ? Constantes.VALOR_INVALIDO : position;
 
                 if (Constantes.VALOR_INVALIDO == clickedPosition || photoGrid.canChangeImage()) {
-                    tempPosition = position;
+                    photoGrid.getControllerImage().setTempPosition(position);
                     exibirAlert();
                     return;
                 }
 
-                tempPosition = Constantes.VALOR_INVALIDO;
+                photoGrid.getControllerImage().setTempPosition(Constantes.VALOR_INVALIDO);
                 Toast.makeText(ActivityPhotoGrid.this, "Já existe imagem vinculada", Toast.LENGTH_SHORT).show();
             }
         }, this, photoGrid.getCallbackImageLoadable());
@@ -109,23 +122,23 @@ public class ActivityPhotoGrid extends ActivityGeneric implements Callback, OnSt
 
     @Override
     public void usarCamera() {
-        Intent intent = getTakePictureIntent();
+        Intent intent = photoGrid.getControllerImage().getTakePictureIntent();
         startActivityForResult(intent, REQUEST_CODE_TAKE_PICTURE);
     }
 
     @Override
     public void usarGaleria() {
-        Intent intent = getAttachPictureIntent();
+        Intent intent = photoGrid.getControllerImage().getAttachPictureIntent();
         startActivityForResult(intent, REQUEST_CODE_ATTACH_PICTURE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_ATTACH_PICTURE) {
-            handleAttachPictureResult(data);
+            photoGrid.getControllerImage().handleAttachPictureResult(data);
         }
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_TAKE_PICTURE) {
-            handleTakePictureResult();
+            photoGrid.getControllerImage().handleTakePictureResult();
         }
     }
 

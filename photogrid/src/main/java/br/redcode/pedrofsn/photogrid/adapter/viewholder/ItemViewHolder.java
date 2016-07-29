@@ -1,4 +1,4 @@
-package br.redcode.pedrofsn.photogrid;
+package br.redcode.pedrofsn.photogrid.adapter.viewholder;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -6,7 +6,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import br.redcode.pedrofsn.photogrid.helper.ItemTouchHelperViewHolder;
+import br.redcode.pedrofsn.photogrid.R;
+import br.redcode.pedrofsn.photogrid.domain.ItemTouchHelperViewHolder;
 
 /**
  * Created by pedrofsn on 28/07/2016.

@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="br.redcode.pedrofsn.photogrid.ActivityPhotoGrid"/>
+        <activity android:name="br.redcode.pedrofsn.photogrid.activity.ActivityPhotoGrid"/>
     </application>
 
 </manifest>

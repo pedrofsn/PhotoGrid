@@ -1,4 +1,4 @@
-package br.redcode.pedrofsn.photogrid;
+package br.redcode.pedrofsn.photogrid.domain;
 
 /**
  * Created by pedrofsn on 28/07/2016.

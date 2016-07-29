@@ -1,4 +1,4 @@
-package br.redcode.pedrofsn.photogrid;
+package br.redcode.pedrofsn.photogrid.utils;
 
 /**
  * Created by pedrofsn on 28/07/2016.

@@ -1,4 +1,4 @@
-package br.redcode.pedrofsn.photogrid;
+package br.redcode.pedrofsn.photogrid.adapter;
 
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +10,18 @@ import android.view.ViewGroup;
 import java.util.Collections;
 import java.util.List;
 
-import br.redcode.pedrofsn.photogrid.helper.ItemTouchHelperAdapter;
-import br.redcode.pedrofsn.photogrid.helper.OnStartDragListener;
+import br.redcode.pedrofsn.photogrid.R;
+import br.redcode.pedrofsn.photogrid.adapter.viewholder.ItemViewHolder;
+import br.redcode.pedrofsn.photogrid.domain.ImageLoadable;
+import br.redcode.pedrofsn.photogrid.domain.ItemTouchHelperAdapter;
+import br.redcode.pedrofsn.photogrid.domain.MyOnItemClickListener;
+import br.redcode.pedrofsn.photogrid.domain.OnStartDragListener;
+import br.redcode.pedrofsn.photogrid.model.ThumbnailDraggable;
+import br.redcode.pedrofsn.photogrid.utils.Utils;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<ItemViewHolder> implements ItemTouchHelperAdapter {
 
-    private final OnStartDragListener mDragStartListener;
+    private final OnStartDragListener dragStartListener;
     private List<ThumbnailDraggable> lista;
     private MyOnItemClickListener callback;
     private ImageLoadable callbackImageLoadable;
@@ -23,7 +29,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ItemViewHolder> im
     public RecyclerViewAdapter(List<ThumbnailDraggable> lista, MyOnItemClickListener callback, OnStartDragListener dragStartListener, ImageLoadable callbackImageLoadable) {
         this.lista = lista;
         this.callback = callback;
-        this.mDragStartListener = dragStartListener;
+        this.dragStartListener = dragStartListener;
         this.callbackImageLoadable = callbackImageLoadable;
     }
 
@@ -47,7 +53,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ItemViewHolder> im
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                        mDragStartListener.onStartDrag(holder);
+                        dragStartListener.onStartDrag(holder);
                     }
                     return false;
                 }

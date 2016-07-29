@@ -1,4 +1,4 @@
-package br.redcode.pedrofsn.photogrid;
+package br.redcode.pedrofsn.photogrid.model;
 
 import java.io.File;
 

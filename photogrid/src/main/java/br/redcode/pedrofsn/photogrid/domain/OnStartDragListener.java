@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package br.redcode.pedrofsn.photogrid.helper;
+package br.redcode.pedrofsn.photogrid.domain;
 
 import android.support.v7.widget.RecyclerView;
 

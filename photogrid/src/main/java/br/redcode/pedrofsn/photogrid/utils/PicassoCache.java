@@ -1,4 +1,4 @@
-package br.redcode.pedrofsn.photogrid;
+package br.redcode.pedrofsn.photogrid.utils;
 
 import android.content.Context;
 import android.widget.ImageView;
@@ -8,38 +8,40 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
+import br.redcode.pedrofsn.photogrid.App;
+
 /**
  * Created by pedrofsn on 09/06/2016.
  */
 public class PicassoCache {
 
-    private static Picasso picassoInstance = null;
+    private static Picasso instance = null;
 
     private PicassoCache(Context context) {
 
         OkHttp3Downloader client = new OkHttp3Downloader(context, Integer.MAX_VALUE);
 
-        picassoInstance = new Picasso.Builder(context)
+        instance = new Picasso.Builder(context)
                 .downloader(client)
                 .loggingEnabled(true)
                 .build();
     }
 
-    public static Picasso getPicassoInstance(Context context) {
+    public static Picasso getInstance(Context context) {
 
-        if (Utils.isNullOrEmpty(picassoInstance)) {
+        if (Utils.isNullOrEmpty(instance)) {
             new PicassoCache(context);
-            return picassoInstance;
+            return instance;
         }
 
-        return picassoInstance;
+        return instance;
     }
 
     public static void carregar(Object object, ImageView imageView) {
         if (!Utils.isNullOrEmpty(object)) {
 
             if (object instanceof File) {
-                PicassoCache.getPicassoInstance(App.getContext())
+                PicassoCache.getInstance(App.getContext())
                         .load(((File) object))
                         .error(getDrawableError())
                         .placeholder(getDrawablePlaceHolder())
@@ -47,7 +49,7 @@ public class PicassoCache {
                         .into(imageView);
 
             } else if (object instanceof String) {
-                PicassoCache.getPicassoInstance(App.getContext())
+                PicassoCache.getInstance(App.getContext())
                         .load(((String) object))
                         .error(getDrawableError())
                         .placeholder(getDrawablePlaceHolder())
