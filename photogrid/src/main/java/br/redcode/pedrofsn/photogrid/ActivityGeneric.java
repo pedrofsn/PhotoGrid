@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by User on 29/07/2016.
+ * Created by pedrofsn on 29/07/2016.
  */
 public class ActivityGeneric extends AppCompatActivity {
 

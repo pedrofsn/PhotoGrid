@@ -3,7 +3,7 @@ package br.redcode.pedrofsn.photogrid;
 import android.widget.ImageView;
 
 /**
- * Created by User on 28/07/2016.
+ * Created by pedrofsn on 28/07/2016.
  */
 public interface ImageLoadable {
 
