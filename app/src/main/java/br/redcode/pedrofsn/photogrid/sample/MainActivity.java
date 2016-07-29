@@ -13,8 +13,8 @@ import br.redcode.pedrofsn.photogrid.ThumbnailDraggable;
 
 public class MainActivity extends AppCompatActivity {
 
-    private PhotoGrid photoGrid;
     private static final int COLUNAS = 3;
+    private PhotoGrid photoGrid;
     private List<ThumbnailDraggable> lista = new ArrayList<>();
 
     @Override

@@ -6,6 +6,8 @@ import android.widget.ImageView;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 /**
  * Created by pedrofsn on 09/06/2016.
  */
@@ -36,9 +38,9 @@ public class PicassoCache {
     public static void carregar(Object object, ImageView imageView) {
         if (!Utils.isNullOrEmpty(object)) {
 
-            if (object instanceof Integer) {
+            if (object instanceof File) {
                 PicassoCache.getPicassoInstance(App.getContext())
-                        .load(((Integer) object))
+                        .load(((File) object))
                         .error(getDrawableError())
                         .placeholder(getDrawablePlaceHolder())
                         .priority(getPriority())
@@ -60,11 +62,11 @@ public class PicassoCache {
     }
 
     private static int getDrawablePlaceHolder() {
-        return android.R.drawable.ic_menu_gallery;
+        return android.R.drawable.checkbox_on_background;
     }
 
     private static int getDrawableError() {
-        return android.R.drawable.stat_notify_error;
+        return android.R.drawable.star_on;
     }
 
 }

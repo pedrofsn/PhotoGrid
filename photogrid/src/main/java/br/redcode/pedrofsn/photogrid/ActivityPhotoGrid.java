@@ -1,14 +1,9 @@
 package br.redcode.pedrofsn.photogrid;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,37 +12,20 @@ import android.view.View;
 import android.widget.ImageView;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import br.redcode.pedrofsn.photogrid.helper.OnStartDragListener;
 import br.redcode.pedrofsn.photogrid.helper.SimpleItemTouchHelperCallback;
 
 
-public class ActivityPhotoGrid extends Activity implements Callback, OnStartDragListener {
+public class ActivityPhotoGrid extends ActivityGeneric implements Callback, OnStartDragListener {
 
     private static final int REQUEST_CODE_TAKE_PICTURE = 9393;
     private static final int REQUEST_CODE_ATTACH_PICTURE = 3939;
-
     private ItemTouchHelper mItemTouchHelper;
-
     private List<ThumbnailDraggable> lista = new ArrayList<>();
-
-    private String mTakePicturePath;
-    private int tempPosition = Constantes.VALOR_INVALIDO;
     private RecyclerViewAdapter adapter;
-
-    PhotoGrid photoGrid;
-
-    private static File getNewImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        return File.createTempFile(imageFileName, ".jpg", storageDir);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +40,10 @@ public class ActivityPhotoGrid extends Activity implements Callback, OnStartDrag
         recyclerView.setLayoutManager(layoutManager);
 
         lista.add(new ThumbnailDraggable(0, "http://www.blogwebdesignmicrocamp.com.br/wp-content/uploads/2015/09/carro.png"));
-        lista.add(new ThumbnailDraggable(1, ""));
+        lista.add(new ThumbnailDraggable(1, new File("/storage/emulated/0/Download/pedrofsn.jpg")));
         lista.add(new ThumbnailDraggable(2, "http://caminhosdailuminacao.com.br/wp-content/uploads/2016/01/a-importancia-do-carro-para-os-homens.png"));
         lista.add(new ThumbnailDraggable(3, "http://motoshopconsorcio.com.br/wp-content/uploads/photo-gallery/carro_top2.png"));
-        lista.add(new ThumbnailDraggable(4, "pera"));
+        lista.add(new ThumbnailDraggable(4, new File("/storage/emulated/0/Download/camaro.jpg")));
         lista.add(new ThumbnailDraggable(5, "pera"));
         lista.add(new ThumbnailDraggable(6, "pera"));
         lista.add(new ThumbnailDraggable(7, "pera"));
@@ -86,8 +64,8 @@ public class ActivityPhotoGrid extends Activity implements Callback, OnStartDrag
                     }
 
                     @Override
-                    public void loadImageView(Uri uri, ImageView imageView) {
-                        PicassoCache.carregar(uri, imageView);
+                    public void loadImageView(File file, ImageView imageView) {
+                        PicassoCache.carregar(file, imageView);
                     }
                 })
                 .build();
@@ -160,76 +138,9 @@ public class ActivityPhotoGrid extends Activity implements Callback, OnStartDrag
         }
     }
 
-    private Intent getTakePictureIntent() {
-        mTakePicturePath = null;
-        File pictureFile = null;
-
-        try {
-            pictureFile = getNewImageFile();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        if (pictureFile == null)
-            return null;
-
-        mTakePicturePath = pictureFile.getAbsolutePath();
-        Utils.log("Path: " + mTakePicturePath);
-
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureFile));
-        return takePictureIntent;
-    }
-
-    private Intent getAttachPictureIntent() {
-        Intent attachPictureIntent = new Intent(Intent.ACTION_PICK);
-        attachPictureIntent.setType("image/*");
-        return attachPictureIntent;
-    }
-
-    private void handleTakePictureResult() {
-        Utils.log("File Path: " + mTakePicturePath);
-
-        addThumbnail(mTakePicturePath);
-        addNewImageToGallery(this, mTakePicturePath);
-    }
-
-    private void handleAttachPictureResult(Intent data) {
-        Uri uri = data.getData();
-        addThumbnail(getRealPathFromURI(this, uri));
-    }
-
-    private void addNewImageToGallery(Context context, String filePath) {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(filePath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        context.sendBroadcast(mediaScanIntent);
-    }
-
-    private String getRealPathFromURI(Context context, Uri contentURI) {
-        String result = null;
-        Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            result = cursor.getString(idx);
-            cursor.close();
-        }
-        return result;
-    }
-
-    private void addThumbnail(Object obj) {
-        Utils.log("addThumbnail na posição " + tempPosition + ": " + obj);
-
-        if (!Utils.isNullOrEmpty(obj) && !Utils.isNullOrEmpty(photoGrid) && !Utils.isNullOrEmpty(photoGrid.getData()) && Constantes.VALOR_INVALIDO != tempPosition) {
-            if (obj instanceof Uri && tempPosition <= photoGrid.getData().size() - 1) {
-                photoGrid.getData().get(tempPosition).setUri(((Uri) obj));
-            } else if (obj instanceof String) {
-                photoGrid.getData().get(tempPosition).setUrl(((String) obj));
-            }
-//            adapter.notifyDataSetChanged();
-            tempPosition = Constantes.VALOR_INVALIDO;
-        }
+    @Override
+    public void addThumbnail(Object obj) {
+        super.addThumbnail(obj);
+        adapter.notifyDataSetChanged();
     }
 }

@@ -1,6 +1,6 @@
 package br.redcode.pedrofsn.photogrid;
 
-import android.net.Uri;
+import java.io.File;
 
 /**
  * Created by pedrofsn on 27/07/2016.
@@ -9,11 +9,16 @@ public class ThumbnailDraggable {
 
     private String url;
     private int posicao;
-    private Uri uri;
+    private File file;
 
     public ThumbnailDraggable(int posicao, String url) {
         this.posicao = posicao;
         this.url = url;
+    }
+
+    public ThumbnailDraggable(int posicao, File file) {
+        this.posicao = posicao;
+        this.file = file;
     }
 
     public String getUrl() {
@@ -32,15 +37,15 @@ public class ThumbnailDraggable {
         this.posicao = posicao;
     }
 
-    public Uri getUri() {
-        return uri;
+    public File getFile() {
+        return file;
     }
 
-    public void setUri(Uri uri) {
-        this.uri = uri;
+    public void setFile(File file) {
+        this.file = file;
     }
 
     public Object getPath() {
-        return Utils.isNullOrEmpty(uri) ? url : uri;
+        return Utils.isNullOrEmpty(file) ? url : file;
     }
 }

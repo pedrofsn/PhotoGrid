@@ -1,6 +1,5 @@
 package br.redcode.pedrofsn.photogrid;
 
-import android.net.Uri;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,8 +55,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ItemViewHolder> im
 
                         if (!Utils.isNullOrEmpty(obj) && !Utils.isNullOrEmpty(holder.handleView)) {
 
-                            if (obj instanceof Uri) {
-                                callbackImageLoadable.loadImageView((Uri) obj, holder.handleView);
+                            if (obj instanceof File) {
+                                callbackImageLoadable.loadImageView((File) obj, holder.handleView);
 
                             } else if (obj instanceof String) {
                                 callbackImageLoadable.loadImageView((String) obj, holder.handleView);
