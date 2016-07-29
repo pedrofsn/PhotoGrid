@@ -19,7 +19,6 @@ import java.util.List;
 
 import br.redcode.pedrofsn.photogrid.R;
 import br.redcode.pedrofsn.photogrid.adapter.RecyclerViewAdapter;
-import br.redcode.pedrofsn.photogrid.domain.Callback;
 import br.redcode.pedrofsn.photogrid.domain.CallbackItemChanged;
 import br.redcode.pedrofsn.photogrid.domain.ImageLoadable;
 import br.redcode.pedrofsn.photogrid.domain.MyOnItemClickListener;
@@ -32,10 +31,8 @@ import br.redcode.pedrofsn.photogrid.utils.PicassoCache;
 import br.redcode.pedrofsn.photogrid.utils.Utils;
 
 
-public class ActivityPhotoGrid extends AppCompatActivity implements Callback, OnStartDragListener, CallbackItemChanged {
+public class ActivityPhotoGrid extends AppCompatActivity implements OnStartDragListener, CallbackItemChanged {
 
-    private static final int REQUEST_CODE_TAKE_PICTURE = 9393;
-    private static final int REQUEST_CODE_ATTACH_PICTURE = 3939;
     public PhotoGrid photoGrid;
     private ItemTouchHelper mItemTouchHelper;
     private List<ThumbnailDraggable> lista = new ArrayList<>();
@@ -120,24 +117,22 @@ public class ActivityPhotoGrid extends AppCompatActivity implements Callback, On
         mItemTouchHelper.startDrag(viewHolder);
     }
 
-    @Override
     public void usarCamera() {
         Intent intent = photoGrid.getControllerImage().getTakePictureIntent();
-        startActivityForResult(intent, REQUEST_CODE_TAKE_PICTURE);
+        startActivityForResult(intent, Constantes.REQUEST_CODE_TAKE_PICTURE);
     }
 
-    @Override
     public void usarGaleria() {
         Intent intent = photoGrid.getControllerImage().getAttachPictureIntent();
-        startActivityForResult(intent, REQUEST_CODE_ATTACH_PICTURE);
+        startActivityForResult(intent, Constantes.REQUEST_CODE_ATTACH_PICTURE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_ATTACH_PICTURE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == Constantes.REQUEST_CODE_ATTACH_PICTURE) {
             photoGrid.getControllerImage().handleAttachPictureResult(data);
         }
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_TAKE_PICTURE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == Constantes.REQUEST_CODE_TAKE_PICTURE) {
             photoGrid.getControllerImage().handleTakePictureResult();
         }
     }
