@@ -18,12 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.redcode.pedrofsn.photogrid.R;
-import br.redcode.pedrofsn.photogrid.adapter.RecyclerViewAdapter;
 import br.redcode.pedrofsn.photogrid.domain.CallbackItemChanged;
 import br.redcode.pedrofsn.photogrid.domain.ImageLoadable;
 import br.redcode.pedrofsn.photogrid.domain.MyOnItemClickListener;
 import br.redcode.pedrofsn.photogrid.domain.OnStartDragListener;
-import br.redcode.pedrofsn.photogrid.domain.SimpleItemTouchHelperCallback;
 import br.redcode.pedrofsn.photogrid.model.ThumbnailDraggable;
 import br.redcode.pedrofsn.photogrid.utils.Constantes;
 import br.redcode.pedrofsn.photogrid.utils.PhotoGrid;
@@ -31,12 +29,11 @@ import br.redcode.pedrofsn.photogrid.utils.PicassoCache;
 import br.redcode.pedrofsn.photogrid.utils.Utils;
 
 
-public class ActivityPhotoGrid extends AppCompatActivity implements OnStartDragListener, CallbackItemChanged {
+public class ActivityPhotoGrid extends AppCompatActivity implements CallbackItemChanged {
 
     public PhotoGrid photoGrid;
-    private ItemTouchHelper mItemTouchHelper;
+    private ItemTouchHelper itemTouchHelper;
     private List<ThumbnailDraggable> lista = new ArrayList<>();
-    private RecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,28 +65,32 @@ public class ActivityPhotoGrid extends AppCompatActivity implements OnStartDragL
                         PicassoCache.carregar(o, imageView);
                     }
                 })
+                .callbackMyOnItemClickListener(new MyOnItemClickListener() {
+                    @Override
+                    public void myOnItemClick(View view, int position) {
+                        int clickedPosition = Utils.isNullOrEmpty(photoGrid.getData().get(position).getPath()) ? Constantes.VALOR_INVALIDO : position;
+
+                        if (Constantes.VALOR_INVALIDO == clickedPosition || photoGrid.canChangeImage()) {
+                            photoGrid.getControllerImage().setTempPosition(position);
+                            exibirAlert();
+                            return;
+                        }
+
+                        photoGrid.getControllerImage().setTempPosition(Constantes.VALOR_INVALIDO);
+                        Toast.makeText(ActivityPhotoGrid.this, "Já existe imagem vinculada", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .dragStartListener(new OnStartDragListener() {
+                    @Override
+                    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+                        itemTouchHelper.startDrag(viewHolder);
+                    }
+                })
                 .build();
 
-        adapter = new RecyclerViewAdapter(photoGrid.getData(), new MyOnItemClickListener() {
-            @Override
-            public void myOnItemClick(View view, int position) {
-                int clickedPosition = Utils.isNullOrEmpty(photoGrid.getData().get(position).getPath()) ? Constantes.VALOR_INVALIDO : position;
 
-                if (Constantes.VALOR_INVALIDO == clickedPosition || photoGrid.canChangeImage()) {
-                    photoGrid.getControllerImage().setTempPosition(position);
-                    exibirAlert();
-                    return;
-                }
-
-                photoGrid.getControllerImage().setTempPosition(Constantes.VALOR_INVALIDO);
-                Toast.makeText(ActivityPhotoGrid.this, "Já existe imagem vinculada", Toast.LENGTH_SHORT).show();
-            }
-        }, this, photoGrid.getCallbackImageLoadable());
-
-        photoGrid.getRecyclerView().setAdapter(adapter);
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(photoGrid.getRecyclerView());
+        itemTouchHelper = new ItemTouchHelper(photoGrid.getSimpleItemTouchHelperCallback());
+        itemTouchHelper.attachToRecyclerView(photoGrid.getRecyclerView());
     }
 
     public void exibirAlert() {
@@ -110,11 +111,6 @@ public class ActivityPhotoGrid extends AppCompatActivity implements OnStartDragL
 
         AlertDialog alertDialogObject = dialogBuilder.create();
         alertDialogObject.show();
-    }
-
-    @Override
-    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        mItemTouchHelper.startDrag(viewHolder);
     }
 
     public void usarCamera() {
@@ -139,6 +135,6 @@ public class ActivityPhotoGrid extends AppCompatActivity implements OnStartDragL
 
     @Override
     public void notifyItemChanged(int position) {
-        adapter.notifyItemChanged(position);
+        photoGrid.getAdapter().notifyItemChanged(position);
     }
 }

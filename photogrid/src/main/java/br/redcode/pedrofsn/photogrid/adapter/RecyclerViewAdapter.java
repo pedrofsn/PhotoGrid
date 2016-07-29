@@ -21,10 +21,14 @@ import br.redcode.pedrofsn.photogrid.utils.Utils;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<ItemViewHolder> implements ItemTouchHelperAdapter {
 
-    private final OnStartDragListener dragStartListener;
+    private OnStartDragListener dragStartListener;
     private List<ThumbnailDraggable> lista;
     private MyOnItemClickListener callback;
     private ImageLoadable callbackImageLoadable;
+
+    public RecyclerViewAdapter() {
+
+    }
 
     public RecyclerViewAdapter(List<ThumbnailDraggable> lista, MyOnItemClickListener callback, OnStartDragListener dragStartListener, ImageLoadable callbackImageLoadable) {
         this.lista = lista;
@@ -52,18 +56,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ItemViewHolder> im
             holder.handleView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+
+                    if (MotionEvent.ACTION_DOWN == MotionEventCompat.getActionMasked(event)) {
                         dragStartListener.onStartDrag(holder);
                     }
+
                     return false;
                 }
+
             });
 
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     if (!Utils.isNullOrEmpty(lista.get(position)) && !Utils.isNullOrEmpty(callbackImageLoadable) && !Utils.isNullOrEmpty(holder.handleView)) {
-
                         Object obj = lista.get(position).getPath();
                         callbackImageLoadable.loadImageView(obj, holder.handleView);
                     }
@@ -98,4 +104,35 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ItemViewHolder> im
         return lista.size();
     }
 
+    public OnStartDragListener getDragStartListener() {
+        return dragStartListener;
+    }
+
+    public void setDragStartListener(OnStartDragListener dragStartListener) {
+        this.dragStartListener = dragStartListener;
+    }
+
+    public List<ThumbnailDraggable> getLista() {
+        return lista;
+    }
+
+    public void setLista(List<ThumbnailDraggable> lista) {
+        this.lista = lista;
+    }
+
+    public MyOnItemClickListener getCallback() {
+        return callback;
+    }
+
+    public void setCallback(MyOnItemClickListener callback) {
+        this.callback = callback;
+    }
+
+    public ImageLoadable getCallbackImageLoadable() {
+        return callbackImageLoadable;
+    }
+
+    public void setCallbackImageLoadable(ImageLoadable callbackImageLoadable) {
+        this.callbackImageLoadable = callbackImageLoadable;
+    }
 }
