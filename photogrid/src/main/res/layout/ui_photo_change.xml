@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/size_image"
+    android:layout_height="@dimen/size_image"
+    android:layout_gravity="center"
+    android:layout_margin="10dp"
+    android:background="#F0FCBA"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="@dimen/size_image"
+        android:layout_height="@dimen/size_image">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/size_image"
+            android:layout_height="@dimen/size_image"
+            android:src="@android:drawable/star_big_on" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:text="Capa" />
+
+        <ImageView
+            android:id="@+id/imageViewRemover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:background="@android:color/holo_red_light"
+            android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
+
+    </FrameLayout>
+
+</LinearLayout>
