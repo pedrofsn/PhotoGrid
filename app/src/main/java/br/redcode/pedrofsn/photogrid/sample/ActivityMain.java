@@ -1,4 +1,4 @@
-package br.redcode.pedrofsn.photogrid.activity;
+package br.redcode.pedrofsn.photogrid.sample;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -17,7 +19,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.redcode.pedrofsn.photogrid.R;
 import br.redcode.pedrofsn.photogrid.domain.CallbackItemChanged;
 import br.redcode.pedrofsn.photogrid.domain.ImageLoadable;
 import br.redcode.pedrofsn.photogrid.domain.MyOnItemClickListener;
@@ -28,15 +29,14 @@ import br.redcode.pedrofsn.photogrid.utils.PhotoGrid;
 import br.redcode.pedrofsn.photogrid.utils.PicassoCache;
 import br.redcode.pedrofsn.photogrid.utils.Utils;
 
-
-public class ActivityPhotoGrid extends AppCompatActivity implements CallbackItemChanged {
+public class ActivityMain extends AppCompatActivity implements CallbackItemChanged {
 
     public PhotoGrid photoGrid;
     private ItemTouchHelper itemTouchHelper;
     private List<ThumbnailDraggable> lista = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -77,7 +77,7 @@ public class ActivityPhotoGrid extends AppCompatActivity implements CallbackItem
                         }
 
                         photoGrid.getControllerImage().setTempPosition(Constantes.VALOR_INVALIDO);
-                        Toast.makeText(ActivityPhotoGrid.this, "Já existe imagem vinculada", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivityMain.this, "Já existe imagem vinculada", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .dragStartListener(new OnStartDragListener() {
@@ -95,8 +95,8 @@ public class ActivityPhotoGrid extends AppCompatActivity implements CallbackItem
 
     public void exibirAlert() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle(getString(R.string.selecionar_imagem));
-        dialogBuilder.setItems(getResources().getStringArray(R.array.capturar_imagem), new DialogInterface.OnClickListener() {
+        dialogBuilder.setTitle(getString(br.redcode.pedrofsn.photogrid.R.string.selecionar_imagem));
+        dialogBuilder.setItems(getResources().getStringArray(br.redcode.pedrofsn.photogrid.R.array.capturar_imagem), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
@@ -136,5 +136,21 @@ public class ActivityPhotoGrid extends AppCompatActivity implements CallbackItem
     @Override
     public void notifyItemChanged(int position) {
         photoGrid.getAdapter().notifyItemChanged(position);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuItemInfo:
+                Utils.log("info");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

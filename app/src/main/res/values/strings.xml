@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PhotoGrid</string>
+    <string name="info">Info</string>
 </resources>
