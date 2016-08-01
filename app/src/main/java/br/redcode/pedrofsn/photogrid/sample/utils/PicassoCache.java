@@ -1,4 +1,4 @@
-package br.redcode.pedrofsn.photogrid.utils;
+package br.redcode.pedrofsn.photogrid.sample.utils;
 
 import android.content.Context;
 import android.widget.ImageView;
@@ -8,7 +8,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
-import br.redcode.pedrofsn.photogrid.App;
+import br.redcode.pedrofsn.photogrid.sample.App;
 
 /**
  * Created by pedrofsn on 09/06/2016.

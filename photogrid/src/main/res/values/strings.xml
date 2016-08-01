@@ -1,6 +1,4 @@
 <resources>
     <string name="app_name">PhotoGrid</string>
-    <string name="camera">Câmera</string>
-    <string name="galeria">Galeria</string>
-    <string name="selecionar_imagem">Selecionar Imagem</string>
+    <string name="cover">Cover</string>
 </resources>

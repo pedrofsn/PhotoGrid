@@ -2,6 +2,6 @@
 <resources>
     <string-array name="capturar_imagem">
         <item>@string/camera</item>
-        <item>@string/galeria</item>
+        <item>@string/gallery</item>
     </string-array>
 </resources>

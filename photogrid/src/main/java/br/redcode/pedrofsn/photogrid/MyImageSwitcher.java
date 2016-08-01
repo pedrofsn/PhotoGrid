@@ -1,9 +1,9 @@
-package br.redcode.pedrofsn.photogrid.model;
+package br.redcode.pedrofsn.photogrid;
 
 /**
- * Created by User on 01/08/2016.
+ * Created by pedrofsn on 01/08/2016.
  */
-public class ImageAlteravel {
+public class MyImageSwitcher {
 
     private Object path;
     private boolean cover;

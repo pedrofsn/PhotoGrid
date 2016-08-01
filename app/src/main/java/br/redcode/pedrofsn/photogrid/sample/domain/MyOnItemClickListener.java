@@ -1,4 +1,4 @@
-package br.redcode.pedrofsn.photogrid.domain;
+package br.redcode.pedrofsn.photogrid.sample.domain;
 
 import android.view.View;
 

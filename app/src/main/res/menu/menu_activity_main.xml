@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menuItemInfo"
+        android:id="@+id/menuItemPrint"
         android:icon="@android:drawable/ic_dialog_info"
-        android:title="@string/info"
+        android:title="@string/print"
         app:showAsAction="always" />
 
 </menu>

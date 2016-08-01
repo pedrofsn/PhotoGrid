@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:text="Capa" />
+            android:text="@string/cover" />
 
         <ImageView
             android:id="@+id/imageViewRemover"
@@ -32,7 +32,6 @@
             android:layout_gravity="right|top"
             android:background="@android:color/holo_red_light"
             android:src="@android:drawable/ic_menu_close_clear_cancel" />
-
 
     </FrameLayout>
 

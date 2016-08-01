@@ -1,6 +1,4 @@
-package br.redcode.pedrofsn.photogrid.utils;
-
-import android.util.Log;
+package br.redcode.pedrofsn.photogrid.sample.utils;
 
 import java.util.List;
 
@@ -8,16 +6,6 @@ import java.util.List;
  * Created by pedrofsn on 28/07/2016.
  */
 public class Utils {
-
-    public static void log(String message) {
-        log(Constantes.TAG, message);
-    }
-
-    public static void log(String aaa, String message) {
-        if (message != null) {
-            Log.e(aaa, message);
-        }
-    }
 
     public static boolean isNullOrEmpty(Object o) {
         if (o != null) {

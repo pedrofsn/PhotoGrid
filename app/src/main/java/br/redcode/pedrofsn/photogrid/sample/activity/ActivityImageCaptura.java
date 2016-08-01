@@ -1,36 +1,27 @@
-package br.redcode.pedrofsn.photogrid.controller;
+package br.redcode.pedrofsn.photogrid.sample.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import br.redcode.pedrofsn.photogrid.App;
-import br.redcode.pedrofsn.photogrid.domain.CallbackItemChanged;
-import br.redcode.pedrofsn.photogrid.utils.Constantes;
-import br.redcode.pedrofsn.photogrid.utils.PhotoGrid;
-import br.redcode.pedrofsn.photogrid.utils.Utils;
+import br.redcode.pedrofsn.photogrid.sample.utils.Constantes;
 
 /**
- * Created by User on 29/07/2016.
+ * Created by pedrofsn on 29/07/2016.
  */
-public class ControllerImage {
+public abstract class ActivityImageCaptura extends AppCompatActivity {
 
-    private final PhotoGrid photoGrid;
-    public int tempPosition = Constantes.VALOR_INVALIDO;
+    public int tempPosition = Constantes.INVALID_VALUE;
     private String mTakePicturePath;
-    private CallbackItemChanged callbackItemChanged;
-
-    public ControllerImage(PhotoGrid photoGrid, CallbackItemChanged callbackItemChanged) {
-        this.callbackItemChanged = callbackItemChanged;
-        this.photoGrid = photoGrid;
-    }
 
     private static File getNewImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -67,25 +58,27 @@ public class ControllerImage {
 
     public void handleTakePictureResult() {
         addThumbnail(mTakePicturePath);
-        addNewImageToGallery(mTakePicturePath);
+        addNewImageToGallery(this, mTakePicturePath);
     }
 
     public void handleAttachPictureResult(Intent data) {
         Uri uri = data.getData();
-        addThumbnail(new File(getRealPathFromURI(uri)));
+        addThumbnail(new File(getRealPathFromURI(this, uri)));
     }
 
-    private void addNewImageToGallery(String filePath) {
+    public abstract void addThumbnail(Object o);
+
+    private void addNewImageToGallery(Context context, String filePath) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(filePath);
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
-        App.getContext().sendBroadcast(mediaScanIntent);
+        context.sendBroadcast(mediaScanIntent);
     }
 
-    private String getRealPathFromURI(Uri contentURI) {
+    private String getRealPathFromURI(Context context, Uri contentURI) {
         String result = null;
-        Cursor cursor = App.getContext().getContentResolver().query(contentURI, null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
             int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
@@ -95,18 +88,4 @@ public class ControllerImage {
         return result;
     }
 
-    public void addThumbnail(Object obj) {
-
-        if (!Utils.isNullOrEmpty(obj) && Constantes.VALOR_INVALIDO != tempPosition) {
-            if (tempPosition <= photoGrid.getData().size() - 1) {
-                photoGrid.getData().get(tempPosition).setPath(obj);
-                callbackItemChanged.notifyItemChanged(tempPosition);
-                tempPosition = Constantes.VALOR_INVALIDO;
-            }
-        }
-    }
-
-    public void setTempPosition(int tempPosition) {
-        this.tempPosition = tempPosition;
-    }
 }
