@@ -28,7 +28,7 @@ import br.redcode.pedrofsn.photogrid.sample.utils.Utils;
 /**
  * Created by pedrofsn on 29/07/2016.
  */
-public class ActivityMain extends ActivityImageCaptura implements MyOnItemClickListener, ImageViewLoadable {
+public class ActivityMain extends ActivityImageCapture implements MyOnItemClickListener, ImageViewLoadable {
 
     private AdapterImageSwitcher adapterImageSwitcher;
 

@@ -18,7 +18,7 @@ import br.redcode.pedrofsn.photogrid.sample.utils.Constantes;
 /**
  * Created by pedrofsn on 29/07/2016.
  */
-public abstract class ActivityImageCaptura extends AppCompatActivity {
+public abstract class ActivityImageCapture extends AppCompatActivity {
 
     public int tempPosition = Constantes.INVALID_VALUE;
     private String mTakePicturePath;
