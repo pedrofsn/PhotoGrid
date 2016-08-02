@@ -65,7 +65,8 @@ public class AdapterImageSwitcher extends RecyclerView.Adapter<ImageSwitcherView
             public void onClick(View view) {
                 boolean newStatus = holder.viewImageChange.getCheckBox().isChecked();
                 holder.viewImageChange.getCheckBox().setChecked(newStatus);
-                lista.get(position).setCover(newStatus);
+                MyImageSwitcher myImageSwitcher = lista.get(position);
+                onlyOnecover(position, myImageSwitcher);
             }
         });
     }
@@ -89,8 +90,33 @@ public class AdapterImageSwitcher extends RecyclerView.Adapter<ImageSwitcherView
     public void edit(int position, MyImageSwitcher item) {
         if (position != -1 && lista.size() >= position) {
             lista.set(position, item);
-            notifyItemChanged(position);
+            notifyDataSetChanged();
         }
+    }
+
+    public void onlyOnecover(int position, MyImageSwitcher item) {
+        for (int i = 0; i < lista.size(); i++) {
+            MyImageSwitcher temp = lista.get(i);
+            temp.setCover(false);
+            edit(position, temp);
+        }
+
+        item.setCover(true);
+        edit(position, item);
+
+        notifyDataSetChanged();
+    }
+
+    public MyImageSwitcher getCover() {
+        for (int i = 0; i < lista.size(); i++) {
+            MyImageSwitcher temp = lista.get(i);
+
+            if (temp.isCover()) {
+                return temp;
+            }
+        }
+
+        return null;
     }
 
     public List<MyImageSwitcher> getLista() {

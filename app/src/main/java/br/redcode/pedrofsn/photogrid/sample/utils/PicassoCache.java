@@ -64,7 +64,7 @@ public class PicassoCache {
     }
 
     private static int getDrawablePlaceHolder() {
-        return android.R.drawable.checkbox_on_background;
+        return android.R.drawable.progress_indeterminate_horizontal;
     }
 
     private static int getDrawableError() {

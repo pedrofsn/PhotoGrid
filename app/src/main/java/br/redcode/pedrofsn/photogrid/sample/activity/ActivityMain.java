@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import br.redcode.pedrofsn.photogrid.sample.adapter.AdapterImageSwitcher;
 import br.redcode.pedrofsn.photogrid.sample.domain.MyOnItemClickListener;
 import br.redcode.pedrofsn.photogrid.sample.utils.Constantes;
 import br.redcode.pedrofsn.photogrid.sample.utils.PicassoCache;
+import br.redcode.pedrofsn.photogrid.sample.utils.Utils;
 
 /**
  * Created by pedrofsn on 29/07/2016.
@@ -41,7 +43,7 @@ public class ActivityMain extends ActivityImageCaptura implements MyOnItemClickL
 
         for (int i = 0; i < 12; i++) {
             MyImageSwitcher ia = new MyImageSwitcher();
-            ia.setCover(false);
+            ia.setCover(i == 5);
             ia.setPath(null);
             lista.add(ia);
         }
@@ -54,7 +56,7 @@ public class ActivityMain extends ActivityImageCaptura implements MyOnItemClickL
         recyclerView.setAdapter(adapterImageSwitcher);
     }
 
-    public void showAlert() {
+    public void showAlertImagePicker() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle(getString(R.string.select_image));
         dialogBuilder.setItems(getResources().getStringArray(R.array.capturar_imagem), new DialogInterface.OnClickListener() {
@@ -104,13 +106,37 @@ public class ActivityMain extends ActivityImageCaptura implements MyOnItemClickL
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuItemPrint:
-                for (int i = 0; i < adapterImageSwitcher.getLista().size(); i++) {
-                    MyImageSwitcher myImageSwitcher = adapterImageSwitcher.getLista().get(i);
-                    Log.d("app", String.format(getString(R.string.print_message), i, myImageSwitcher.getPath(), myImageSwitcher.isCover()));
-                }
+                printDetails();
+                showAlertCover();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void printDetails() {
+        for (int i = 0; i < adapterImageSwitcher.getLista().size(); i++) {
+            MyImageSwitcher myImageSwitcher = adapterImageSwitcher.getLista().get(i);
+            Log.d("app", String.format(getString(R.string.print_message), i, myImageSwitcher.getPath(), myImageSwitcher.isCover()));
+        }
+    }
+
+    private void showAlertCover() {
+        MyImageSwitcher cover = adapterImageSwitcher.getCover();
+
+        if (!Utils.isNullOrEmpty(cover)) {
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle(getString(R.string.cover));
+
+            if (cover.getPath() instanceof String) {
+                alertDialog.setMessage(((String) cover.getPath()));
+
+            } else if (cover.getPath() instanceof File) {
+                alertDialog.setMessage(((File) cover.getPath()).getAbsolutePath());
+            }
+
+            alertDialog.show();
+        }
     }
 
     @Override
@@ -124,7 +150,7 @@ public class ActivityMain extends ActivityImageCaptura implements MyOnItemClickL
     @Override
     public void myOnItemClick(View view, int position) {
         tempPosition = position;
-        showAlert();
+        showAlertImagePicker();
     }
 
     @Override
